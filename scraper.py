@@ -21,6 +21,7 @@ def create_custom_hn(links, votes):
     hn = []
     for idx, item in enumerate(links):
         title = links[idx].getText()
+        href = links[idx].get('href')
         hn.append(title)
 
     return hn
