@@ -7,12 +7,20 @@ from bs4 import BeautifulSoup # use the html to scrape; cleans up the data
 import pprint
 
 response = requests.get('https://news.ycombinator.com/news')
+response2 = requests.get('https://news.ycombinator.com/news?p=2')
 # print(response.text)
 
-# CSS selector allows us to grab elements in a HTMl page
 soup = BeautifulSoup(response.text, 'html.parser')
+soup2 = BeautifulSoup(response2.text, 'html.parser')
+
 links = soup.select('.storylink')
 subtext = soup.select('.subtext') 
+
+links2 = soup2.select('.storylink')
+subtext2 = soup2.select('.subtext') 
+
+mega_link = links + links2
+mega_subtext = subtext + subtext2
 
 def sort_stories_by_votes(hnlist):
     return sorted(hnlist, key= lambda k:k['votes'], reverse=True) # sort by votes
@@ -30,5 +38,5 @@ def create_custom_hn(links, subtext):
         
     return sort_stories_by_votes(hn)
 
-pprint.pprint(create_custom_hn(links, subtext))
+pprint.pprint(create_custom_hn(mega_link, mega_subtext))
  
