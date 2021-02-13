@@ -13,13 +13,6 @@ response = requests.get('https://news.ycombinator.com/news')
 soup = BeautifulSoup(response.text, 'html.parser')
 links = soup.select('.storylink')
 subtext = soup.select('.subtext') 
-# votes = soup.select('.score')
-# we need the links and votes
-
-# print(links)
-# print(votes)
-
-
 
 def sort_stories_by_votes(hnlist):
     return sorted(hnlist, key= lambda k:k['votes'], reverse=True) # sort by votes
@@ -27,18 +20,15 @@ def sort_stories_by_votes(hnlist):
 def create_custom_hn(links, subtext):
     hn = []
     for idx, item in enumerate(links):
-        title = links[idx].getText() # can be item.getText()
-        href = links[idx].get('href', None) # we want to get the attribute; # can be item.getText()
+        title = item.getText() # can be links[idx].getText()
+        href = item.get('href', None) # we want to get the attribute; # can be links[idx].get('href', None)
         vote = subtext[idx].select('.score')
         if len(vote): # runs if the vote "list" exists
             points = int(vote[0].getText().replace(' points', ''))
-            # print(points)
             if points > 99:
                 hn.append({'title': title, 'link':href, 'votes': points}) # we grabbed the link and the title
         
     return sort_stories_by_votes(hn)
 
-# create_custom_hn(links, subtext)
-# print(create_custom_hn(links, subtext))
 pprint.pprint(create_custom_hn(links, subtext))
  
